@@ -29,6 +29,9 @@ public class Account {
     @Column(nullable = false, length = 30)
     private String password;
 
+    @Column(nullable = false, length = 10)
+    private String name;
+
     @Column(nullable = false, unique = true, length = 30)
     private String nickname;
 
