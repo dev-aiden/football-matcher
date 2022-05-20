@@ -1,5 +1,7 @@
-package com.aiden.dev.footballmatcher.modules.account;
+package com.aiden.dev.footballmatcher.modules.teammember;
 
+import com.aiden.dev.footballmatcher.modules.account.Account;
+import com.aiden.dev.footballmatcher.modules.team.Team;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,42 +12,26 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
 
 @Entity
 @Getter
 @Builder @AllArgsConstructor @NoArgsConstructor(access = PROTECTED)
-public class Account {
+public class TeamMember {
 
     @Id @GeneratedValue(strategy = IDENTITY)
-    @Column(name = "account_id")
+    @Column(name = "team_member_id")
     private Long id;
 
-    @Column(nullable = false, unique = true, length = 30)
-    private String loginId;
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "account_id", nullable = false)
+    private Account account;
 
-    @Column(nullable = false, length = 30)
-    private String password;
-
-    @Column(nullable = false, length = 10)
-    private String name;
-
-    @Column(nullable = false, unique = true, length = 30)
-    private String nickname;
-
-    @Column(nullable = false, unique = true, length = 30)
-    private String email;
-
-    @Column(nullable = false, columnDefinition = "bit default 0")
-    private boolean emailVerified;
-
-    private String emailCheckToken;
-
-    private LocalDateTime emailCheckTokenGeneratedAt;
-
-    @Lob
-    private String profileImage;
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "team_id", nullable = false)
+    private Team team;
 
     @CreationTimestamp
     @Column(nullable = false, columnDefinition = "datetime default current_timestamp")
