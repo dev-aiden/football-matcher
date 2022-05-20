@@ -1,6 +1,5 @@
 package com.aiden.dev.footballmatcher.modules.team;
 
-import com.aiden.dev.footballmatcher.modules.account.Account;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,11 +10,11 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-import static javax.persistence.FetchType.*;
+import static lombok.AccessLevel.PROTECTED;
 
 @Entity
 @Getter
-@Builder @AllArgsConstructor @NoArgsConstructor
+@Builder @AllArgsConstructor @NoArgsConstructor(access = PROTECTED)
 public class Team {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,24 +22,22 @@ public class Team {
     private Long id;
 
     @Column(nullable = false)
-    private String teamName;
+    private String name;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "bit default 0")
     private boolean secret;
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(nullable = false)
-    private Account manager;
 
     @Lob
     private String emblem;
 
     @Lob
-    private String explain;
+    private String description;
 
     @CreationTimestamp
+    @Column(nullable = false, columnDefinition = "datetime default current_timestamp")
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
+    @Column(nullable = false, columnDefinition = "datetime default current_timestamp")
     private LocalDateTime updatedAt;
 }
