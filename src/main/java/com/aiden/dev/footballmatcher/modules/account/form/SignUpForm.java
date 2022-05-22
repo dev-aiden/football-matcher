@@ -11,8 +11,8 @@ import javax.validation.constraints.Pattern;
 public class SignUpForm {
 
     @NotBlank
-    @Length(min = 3, max = 20)
-    @Pattern(regexp = "^[a-z0-9_-]{3,20}$")
+    @Length(min = 4, max = 20)
+    @Pattern(regexp = "^[a-z0-9_-]{4,20}$")
     private String loginId;
 
     @NotBlank
@@ -27,8 +27,12 @@ public class SignUpForm {
     private String name;
 
     @NotBlank
-    @Pattern(regexp = "^[ㄱ-ㅎ가-힣A-Za-z0-9_-]{3,20}$")
+    @Pattern(regexp = "^[ㄱ-ㅎ가-힣A-Za-z0-9]{2,10}$")
     private String nickname;
+
+    @NotBlank
+    @Pattern(regexp = "^[0-9]{11}$")
+    private String phoneNumber;
 
     @Email
     @NotBlank

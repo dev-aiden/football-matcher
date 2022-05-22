@@ -1,9 +1,10 @@
 create table account (
     account_id bigint not null auto_increment,
-    login_id varchar(30) not null,
-    password varchar(30) not null,
+    login_id varchar(20) not null,
+    password varchar(20) not null,
     name varchar(10) not null,
-    nickname varchar(30) not null,
+    nickname varchar(10) not null,
+    phone_number varchar(11) not null,
     email varchar(30) not null,
     email_verified bit default 0 not null,
     email_check_token varchar(255),
@@ -17,6 +18,7 @@ create table account (
 alter table account add constraint UK_email unique (email);
 alter table account add constraint UK_login_id unique (login_id);
 alter table account add constraint UK_nickname unique (nickname);
+alter table account add constraint UK_phone_number unique (phone_number);
 
 create table team (
     team_id bigint not null auto_increment,

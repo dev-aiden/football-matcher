@@ -22,17 +22,20 @@ public class Account {
     @Column(name = "account_id")
     private Long id;
 
-    @Column(nullable = false, unique = true, length = 30)
+    @Column(nullable = false, unique = true, length = 20)
     private String loginId;
 
-    @Column(nullable = false, length = 30)
+    @Column(nullable = false, length = 20)
     private String password;
 
     @Column(nullable = false, length = 10)
     private String name;
 
-    @Column(nullable = false, unique = true, length = 30)
+    @Column(nullable = false, unique = true, length = 10)
     private String nickname;
+
+    @Column(nullable = false, unique = true, length = 11)
+    private String phoneNumber;
 
     @Column(nullable = false, unique = true, length = 30)
     private String email;
