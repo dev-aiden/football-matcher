@@ -9,6 +9,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import static javax.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
@@ -57,4 +58,10 @@ public class Account {
     @UpdateTimestamp
     @Column(nullable = false, columnDefinition = "datetime default current_timestamp")
     private LocalDateTime updatedAt;
+
+    public void generateEmailCheckToken() {
+        this.emailVerified = false;
+        this.emailCheckToken = UUID.randomUUID().toString();
+        this.emailCheckTokenGeneratedAt = LocalDateTime.now();
+    }
 }
