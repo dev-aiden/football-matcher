@@ -31,6 +31,13 @@
                 <small class="form-text text-danger" th:if="${#fields.hasErrors('passwordConfirm')}" th:errors="*{passwordConfirm}"></small>
             </div>
             <div class="form-group pb-2">
+                <label for="name">이름</label>
+                <input id="name" type="text" th:field="*{name}" class="form-control" placeholder="name" aria-describedby="nameHelp" required maxlength="10">
+                <small id="nameHelp" class="form-text text-muted">이름을 10자 이내로 입력하세요.</small>
+                <small class="invalid-feedback">이름을 입력하세요.</small>
+                <small class="form-text text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></small>
+            </div>
+            <div class="form-group pb-2">
                 <label for="nickname">닉네임</label>
                 <input id="nickname" type="text" th:field="*{nickname}" class="form-control" placeholder="nickname" aria-describedby="nicknameHelp" required minlength="2" maxlength="10">
                 <small id="nicknameHelp" class="form-text text-muted">공백없이 문자와 숫자로만 2자 이상 10자 이내로 입력하세요.</small>
@@ -39,9 +46,9 @@
             </div>
             <div class="form-group pb-2">
                 <label for="phoneNumber">핸드폰 번호</label>
-                <input id="phoneNumber" type="phoneNumber" th:field="*{phoneNumber}" class="form-control" placeholder="01012345678" aria-describedby="phoneNumberHelp" required>
+                <input id="phoneNumber" type="text" th:field="*{phoneNumber}" class="form-control" placeholder="01012345678" aria-describedby="phoneNumberHelp" required maxlength="11">
                 <small id="phoneNumberHelp" class="form-text text-muted">핸드폰 번호를 숫자만 입력하세요.</small>
-                <small class="invalid-feedback">핸드폰 번호를 숫자만 입력하세요.</small>
+                <small class="invalid-feedback">핸드폰 번호를 입력하세요.</small>
                 <small class="form-text text-danger" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></small>
             </div>
             <div class="form-group pb-2">

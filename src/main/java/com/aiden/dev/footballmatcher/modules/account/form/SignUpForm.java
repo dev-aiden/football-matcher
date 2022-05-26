@@ -24,6 +24,7 @@ public class SignUpForm {
     private String passwordConfirm;
 
     @NotBlank
+    @Length(max = 10)
     private String name;
 
     @NotBlank

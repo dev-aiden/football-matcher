@@ -1,7 +1,7 @@
 create table account (
     account_id bigint not null auto_increment,
     login_id varchar(20) not null,
-    password varchar(20) not null,
+    password varchar(255) not null,
     name varchar(10) not null,
     nickname varchar(10) not null,
     phone_number varchar(11) not null,

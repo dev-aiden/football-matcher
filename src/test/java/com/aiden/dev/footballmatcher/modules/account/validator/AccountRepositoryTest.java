@@ -1,6 +1,7 @@
 package com.aiden.dev.footballmatcher.modules.account.validator;
 
 import com.aiden.dev.footballmatcher.modules.account.Account;
+import com.aiden.dev.footballmatcher.modules.account.AccountRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,7 +13,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DataJpaTest
 class AccountRepositoryTest {
 
-    @Autowired AccountRepository accountRepository;
+    @Autowired
+    AccountRepository accountRepository;
 
     @BeforeEach
     void beforeEach() {

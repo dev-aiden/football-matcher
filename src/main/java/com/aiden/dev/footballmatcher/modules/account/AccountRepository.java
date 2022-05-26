@@ -1,6 +1,5 @@
-package com.aiden.dev.footballmatcher.modules.account.validator;
+package com.aiden.dev.footballmatcher.modules.account;
 
-import com.aiden.dev.footballmatcher.modules.account.Account;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 

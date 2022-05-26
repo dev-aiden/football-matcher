@@ -1,5 +1,6 @@
 package com.aiden.dev.footballmatcher.modules.account;
 
+import com.aiden.dev.footballmatcher.modules.account.form.SignUpForm;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,7 +27,7 @@ public class Account {
     @Column(nullable = false, unique = true, length = 20)
     private String loginId;
 
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false)
     private String password;
 
     @Column(nullable = false, length = 10)
@@ -59,9 +60,18 @@ public class Account {
     @Column(nullable = false, columnDefinition = "datetime default current_timestamp")
     private LocalDateTime updatedAt;
 
-    public void generateEmailCheckToken() {
-        this.emailVerified = false;
-        this.emailCheckToken = UUID.randomUUID().toString();
-        this.emailCheckTokenGeneratedAt = LocalDateTime.now();
+    public static Account createAccount(SignUpForm signUpForm) {
+        Account account = new Account();
+        account.loginId = signUpForm.getLoginId();
+        account.password = signUpForm.getPassword();
+        account.name = signUpForm.getName();
+        account.nickname = signUpForm.getNickname();
+        account.email = signUpForm.getEmail();
+        account.phoneNumber = signUpForm.getPhoneNumber();
+        account.profileImage = signUpForm.getProfileImage();
+        account.emailVerified = false;
+        account.emailCheckToken = UUID.randomUUID().toString();
+        account.emailCheckTokenGeneratedAt = LocalDateTime.now();
+        return account;
     }
 }

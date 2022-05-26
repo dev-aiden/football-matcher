@@ -1,5 +1,6 @@
 package com.aiden.dev.footballmatcher.modules.account.validator;
 
+import com.aiden.dev.footballmatcher.modules.account.AccountRepository;
 import com.aiden.dev.footballmatcher.modules.account.form.SignUpForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
