@@ -2,6 +2,7 @@ package com.aiden.dev.footballmatcher.modules.account.validator;
 
 import com.aiden.dev.footballmatcher.modules.account.Account;
 import com.aiden.dev.footballmatcher.modules.account.AccountRepository;
+import com.aiden.dev.footballmatcher.modules.account.form.SignUpForm;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,16 +19,15 @@ class AccountRepositoryTest {
 
     @BeforeEach
     void beforeEach() {
-        Account account = Account.builder()
-                .loginId("aiden")
-                .password("aiden1234")
-                .name("aiden")
-                .nickname("aiden")
-                .phoneNumber("01011112222")
-                .email("aiden@email.com")
-                .build();
-        account.generateEmailCheckToken();
-        accountRepository.save(account);
+        SignUpForm signUpForm = new SignUpForm();
+        signUpForm.setLoginId("aiden");
+        signUpForm.setPassword("aiden1234");
+        signUpForm.setPasswordConfirm("aiden1234");
+        signUpForm.setName("aiden");
+        signUpForm.setNickname("aiden");
+        signUpForm.setPhoneNumber("01011112222");
+        signUpForm.setEmail("aiden@email.com");
+        accountRepository.save(Account.createAccount(signUpForm));
     }
 
     @DisplayName("로그인 아이디로 계정 존재여부 확인하는 쿼리 테스트")

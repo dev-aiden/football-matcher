@@ -21,6 +21,7 @@ class AccountControllerTest {
 
     @Autowired MockMvc mockMvc;
     @MockBean SignUpFormValidator signUpFormValidator;
+    @MockBean AccountService accountService;
 
     @DisplayName("회원가입 화면 보이는지 테스트")
     @Test

@@ -21,8 +21,7 @@ public class AccountService {
 
     public Account createAccount(SignUpForm signUpForm) {
         signUpForm.setPassword(passwordEncoder.encode(signUpForm.getPassword()));
-        Account newAccount = Account.createAccount(signUpForm);
-        accountRepository.save(newAccount);
+        Account newAccount = accountRepository.save(Account.createAccount(signUpForm));
         sendSignUpConfirmEmail(newAccount);
         return newAccount;
     }
