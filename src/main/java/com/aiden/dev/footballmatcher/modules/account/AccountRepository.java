@@ -3,6 +3,8 @@ package com.aiden.dev.footballmatcher.modules.account;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Transactional(readOnly = true)
 public interface AccountRepository extends JpaRepository<Account, Long> {
 
@@ -13,4 +15,6 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
     boolean existsAccountByPhoneNumber(String phoneNumber);
 
     boolean existsAccountByEmail(String email);
+
+    Optional<Account> findByEmail(String email);
 }

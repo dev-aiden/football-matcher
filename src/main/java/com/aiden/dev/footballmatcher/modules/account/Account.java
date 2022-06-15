@@ -74,4 +74,13 @@ public class Account {
         account.emailCheckTokenGeneratedAt = LocalDateTime.now();
         return account;
     }
+
+    public Boolean isInvalidToken(String token) {
+        return !this.emailCheckToken.equals(token);
+    }
+
+    public void completeSignUp() {
+        this.emailVerified = true;
+        this.createdAt = LocalDateTime.now();
+    }
 }

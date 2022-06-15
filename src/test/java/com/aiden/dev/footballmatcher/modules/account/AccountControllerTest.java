@@ -9,6 +9,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -29,7 +30,6 @@ class AccountControllerTest {
         when(signUpFormValidator.supports(any())).thenReturn(true);
 
         mockMvc.perform(get("/sign-up"))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(view().name("account/sign-up"))
                 .andExpect(model().attributeExists("signUpForm"));
@@ -69,5 +69,48 @@ class AccountControllerTest {
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/"));
+    }
+
+    @DisplayName("이메일 인증 테스트 - 잘못된 이메일")
+    @Test
+    void checkEmailToken_wrong_email() throws Exception {
+        when(accountService.findAccountByEmail(any())).thenReturn(null);
+
+        mockMvc.perform(get("/check-email-token")
+                        .param("token", "testToken")
+                        .param("email", "test@email.com"))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("error"))
+                .andExpect(model().attribute("error", "wrong.email"))
+                .andExpect(view().name("account/checked-email"));
+    }
+
+    @DisplayName("이메일 인증 테스트 - 잘못된 토큰")
+    @Test
+    void checkEmailToken_wrong_token() throws Exception {
+        when(accountService.findAccountByEmail(any())).thenReturn(mock(Account.class));
+        when(accountService.findAccountByEmail(any()).isInvalidToken(any())).thenReturn(true);
+
+        mockMvc.perform(get("/check-email-token")
+                        .param("token", "testToken")
+                        .param("email", "test@email.com"))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("error"))
+                .andExpect(model().attribute("error", "wrong.token"))
+                .andExpect(view().name("account/checked-email"));
+    }
+
+    @DisplayName("이메일 인증 테스트")
+    @Test
+    void checkEmailToken() throws Exception {
+        when(accountService.findAccountByEmail(any())).thenReturn(mock(Account.class));
+        when(accountService.findAccountByEmail(any()).isInvalidToken(any())).thenReturn(false);
+
+        mockMvc.perform(get("/check-email-token")
+                        .param("token", "testToken")
+                        .param("email", "test@email.com"))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeDoesNotExist("error"))
+                .andExpect(view().name("account/checked-email"));
     }
 }

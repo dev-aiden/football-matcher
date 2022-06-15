@@ -20,7 +20,6 @@ class MainControllerTest {
     @Test
     void home() throws Exception {
         mockMvc.perform(get("/"))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(view().name("index"));
     }

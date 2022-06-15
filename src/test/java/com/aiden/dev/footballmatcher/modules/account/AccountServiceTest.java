@@ -56,4 +56,14 @@ class AccountServiceTest {
         assertThat(savedAccount.getNickname()).isEqualTo(signUpForm.getNickname());
         assertThat(savedAccount.getEmail()).isEqualTo(signUpForm.getEmail());
     }
+
+    @DisplayName("이메일로 계정 조회 쿼리 테스트")
+    @Test
+    void findAccountByEmail() {
+        // when
+        accountService.findAccountByEmail("aiden@email.com");
+
+        // then
+        then(accountRepository).should().findByEmail("aiden@email.com");
+    }
 }
