@@ -16,6 +16,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .mvcMatchers("/", "/login", "/sign-up", "/check-email-token").permitAll()
                 .anyRequest().authenticated();
+
+        http.logout()
+                .logoutSuccessUrl("/");
     }
 
     @Override
