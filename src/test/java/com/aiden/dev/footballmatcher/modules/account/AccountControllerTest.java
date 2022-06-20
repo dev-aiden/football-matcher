@@ -9,9 +9,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -27,7 +27,7 @@ class AccountControllerTest {
     @DisplayName("회원가입 화면 보이는지 테스트")
     @Test
     void signUpForm() throws Exception {
-        when(signUpFormValidator.supports(any())).thenReturn(true);
+        given(signUpFormValidator.supports(any())).willReturn(true);
 
         mockMvc.perform(get("/sign-up"))
                 .andExpect(status().isOk())
@@ -38,7 +38,7 @@ class AccountControllerTest {
     @DisplayName("회원가입 테스트 - 입력값 에러")
     @Test
     void signUp_has_error() throws Exception {
-        when(signUpFormValidator.supports(any())).thenReturn(true);
+        given(signUpFormValidator.supports(any())).willReturn(true);
 
         mockMvc.perform(post("/sign-up")
                         .param("loginId", "aiden")
@@ -56,7 +56,7 @@ class AccountControllerTest {
     @DisplayName("회원가입 테스트 - 입력값 정상")
     @Test
     void signUp() throws Exception {
-        when(signUpFormValidator.supports(any())).thenReturn(true);
+        given(signUpFormValidator.supports(any())).willReturn(true);
 
         mockMvc.perform(post("/sign-up")
                         .param("loginId", "aiden")
@@ -69,12 +69,15 @@ class AccountControllerTest {
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/"));
+
+        then(accountService).should().createAccount(any());
+        then(accountService).should().login(any());
     }
 
     @DisplayName("이메일 인증 테스트 - 잘못된 이메일")
     @Test
     void checkEmailToken_wrong_email() throws Exception {
-        when(accountService.findAccountByEmail(any())).thenReturn(null);
+        given(accountService.findAccountByEmail(any())).willReturn(null);
 
         mockMvc.perform(get("/check-email-token")
                         .param("token", "testToken")
@@ -88,8 +91,8 @@ class AccountControllerTest {
     @DisplayName("이메일 인증 테스트 - 잘못된 토큰")
     @Test
     void checkEmailToken_wrong_token() throws Exception {
-        when(accountService.findAccountByEmail(any())).thenReturn(mock(Account.class));
-        when(accountService.findAccountByEmail(any()).isInvalidToken(any())).thenReturn(true);
+        given(accountService.findAccountByEmail(any())).willReturn(mock(Account.class));
+        given(accountService.findAccountByEmail(any()).isInvalidToken(any())).willReturn(true);
 
         mockMvc.perform(get("/check-email-token")
                         .param("token", "testToken")
@@ -103,8 +106,8 @@ class AccountControllerTest {
     @DisplayName("이메일 인증 테스트")
     @Test
     void checkEmailToken() throws Exception {
-        when(accountService.findAccountByEmail(any())).thenReturn(mock(Account.class));
-        when(accountService.findAccountByEmail(any()).isInvalidToken(any())).thenReturn(false);
+        given(accountService.findAccountByEmail(any())).willReturn(mock(Account.class));
+        given(accountService.findAccountByEmail(any()).isInvalidToken(any())).willReturn(false);
 
         mockMvc.perform(get("/check-email-token")
                         .param("token", "testToken")
@@ -112,5 +115,7 @@ class AccountControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(model().attributeDoesNotExist("error"))
                 .andExpect(view().name("account/checked-email"));
+
+        then(accountService).should().login(any());
     }
 }

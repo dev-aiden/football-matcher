@@ -9,9 +9,15 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
@@ -65,5 +71,50 @@ class AccountServiceTest {
 
         // then
         then(accountRepository).should().findByEmail("aiden@email.com");
+    }
+
+    @DisplayName("로그인 테스트")
+    @Test
+    void login() {
+        // Given
+        Account account = Account.builder()
+                .loginId("aiden")
+                .password("aiden1234")
+                .build();
+
+        // When
+        accountService.login(account);
+        UserAccount authenticationAccount = (UserAccount) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        // Then
+        assertThat(authenticationAccount.getUsername()).isEqualTo("aiden");
+        assertThat(authenticationAccount.getPassword()).isEqualTo("aiden1234");
+    }
+
+    @DisplayName("유저 정보 조회 테스트 - 사용자 아이디 미존재")
+    @Test
+    void loadUserByUsername_not_exist_login_id() {
+        // When, Then
+        assertThrows(UsernameNotFoundException.class, () -> accountService.loadUserByUsername("test"));
+    }
+
+    @DisplayName("유저 정보 조회 테스트 - 사용자 아이디 존재")
+    @Test
+    void loadUserByUsername_exist_login_id() {
+        // Given
+        Account account = Account.builder()
+                .loginId("aiden")
+                .password("aiden1234")
+                .nickname("aiden")
+                .email("aiden@email.com")
+                .build();
+
+        given(accountRepository.findByLoginId(any())).willReturn(Optional.of(account));
+
+        // When
+        UserDetails userDetails = accountService.loadUserByUsername("aiden");
+
+        // Then
+        assertThat(userDetails.getUsername()).isEqualTo("aiden");
     }
 }
