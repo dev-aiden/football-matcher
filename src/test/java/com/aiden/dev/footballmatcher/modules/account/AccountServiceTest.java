@@ -73,6 +73,22 @@ class AccountServiceTest {
         then(accountRepository).should().findByEmail("aiden@email.com");
     }
 
+    @DisplayName("회원가입 인증 메일 발송 테스트")
+    @Test
+    void sendSignUpConfirmEmail() {
+        // Given
+        Account account = Account.builder()
+                .loginId("test")
+                .password("test1234")
+                .build();
+
+        // When
+        accountService.sendSignUpConfirmEmail(account);
+
+        // Then
+        then(emailService).should().sendEmail(any());
+    }
+
     @DisplayName("로그인 테스트")
     @Test
     void login() {

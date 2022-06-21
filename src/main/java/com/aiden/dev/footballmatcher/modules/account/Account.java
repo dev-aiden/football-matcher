@@ -60,6 +60,10 @@ public class Account {
     @Column(nullable = false, columnDefinition = "datetime default current_timestamp")
     private LocalDateTime updatedAt;
 
+    public void setEmailCheckTokenGeneratedAt(LocalDateTime emailCheckTokenGeneratedAt) {
+        this.emailCheckTokenGeneratedAt = emailCheckTokenGeneratedAt;
+    }
+
     public static Account createAccount(SignUpForm signUpForm) {
         Account account = new Account();
         account.loginId = signUpForm.getLoginId();
@@ -75,12 +79,16 @@ public class Account {
         return account;
     }
 
-    public Boolean isInvalidToken(String token) {
+    public boolean isInvalidToken(String token) {
         return !this.emailCheckToken.equals(token);
     }
 
     public void completeSignUp() {
         this.emailVerified = true;
         this.createdAt = LocalDateTime.now();
+    }
+
+    public boolean isPossibleSendConfirmEmail() {
+        return this.getEmailCheckTokenGeneratedAt().isBefore(LocalDateTime.now().minusHours(1));
     }
 }

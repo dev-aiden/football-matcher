@@ -1,6 +1,7 @@
 package com.aiden.dev.footballmatcher.modules.account;
 
 import com.aiden.dev.footballmatcher.modules.account.form.SignUpForm;
+import com.aiden.dev.footballmatcher.modules.account.validator.CurrentAccount;
 import com.aiden.dev.footballmatcher.modules.account.validator.SignUpFormValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -58,5 +59,23 @@ public class AccountController {
         account.completeSignUp();
         accountService.login(account);
         return "account/checked-email";
+    }
+
+    @GetMapping("/check-email")
+    public String checkEmail(@CurrentAccount Account account, Model model) {
+        model.addAttribute("email", account.getEmail());
+        return "account/check-email";
+    }
+
+    @GetMapping("/resend-confirm-email")
+    public String resendConfirmEmail(@CurrentAccount Account account, Model model) {
+        if(!account.isPossibleSendConfirmEmail()) {
+            model.addAttribute("error", "인증 이메일은 1시간에 한 번만 발송이 가능합니다.");
+            model.addAttribute("email", account.getEmail());
+            return "account/check-email";
+        }
+
+        accountService.sendSignUpConfirmEmail(account);
+        return "redirect:/";
     }
 }

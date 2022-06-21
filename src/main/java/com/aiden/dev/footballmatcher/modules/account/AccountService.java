@@ -32,7 +32,7 @@ public class AccountService implements UserDetailsService {
         return newAccount;
     }
 
-    private void sendSignUpConfirmEmail(Account account) {
+    public void sendSignUpConfirmEmail(Account account) {
         EmailMessage emailMessage = EmailMessage.builder()
                 .to(account.getEmail())
                 .subject("Football Matcher 회원가입 인증")
