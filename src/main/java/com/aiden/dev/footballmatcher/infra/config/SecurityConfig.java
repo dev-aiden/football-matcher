@@ -17,6 +17,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .mvcMatchers("/", "/login", "/sign-up", "/check-email-token").permitAll()
                 .anyRequest().authenticated();
 
+        http.formLogin()
+                .loginPage("/login").permitAll();
+
         http.logout()
                 .logoutSuccessUrl("/");
     }

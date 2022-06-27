@@ -1,6 +1,6 @@
 package com.aiden.dev.footballmatcher.modules.main;
 
-import com.aiden.dev.footballmatcher.modules.account.Account;
+import com.aiden.dev.footballmatcher.modules.account.WithAccount;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,17 +23,21 @@ class MainControllerTest {
                 .andExpect(view().name("index"));
     }
 
+    @WithAccount(loginId = "aiden")
     @DisplayName("index 페이지 보이는지 테스트 - 회원")
     @Test
     void home_member() throws Exception {
-        Account account = Account.builder()
-                .emailVerified(false)
-                .build();
-
-        mockMvc.perform(get("/")
-                        .flashAttr("account", account))
+        mockMvc.perform(get("/"))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("account"))
                 .andExpect(view().name("index"));
+    }
+
+    @DisplayName("로그인 페이지 보이는지 테스트")
+    @Test
+    void login() throws Exception {
+        mockMvc.perform(get("/login"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("login"));
     }
 }
