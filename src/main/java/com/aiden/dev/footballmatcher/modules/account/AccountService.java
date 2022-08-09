@@ -60,4 +60,13 @@ public class AccountService implements UserDetailsService {
         Account account = accountRepository.findByLoginId(loginId).orElseThrow(() -> new UsernameNotFoundException(loginId));
         return new UserAccount(account);
     }
+
+    public void completeSignUp(Account account) {
+        account.completeSignUp();
+        login(account);
+    }
+
+    public Account findAccountByNickname(String nickname) {
+        return accountRepository.findByNickname(nickname).orElse(null);
+    }
 }
